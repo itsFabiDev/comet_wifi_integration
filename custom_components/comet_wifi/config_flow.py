@@ -10,7 +10,7 @@ from .const import DOMAIN, EUROTRONIC_MQTT_SERVERS
 _LOGGER = logging.getLogger(__name__)
 
 
-class CometWifiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Comet WiFi Thermostat."""
 
     VERSION = 1
@@ -63,30 +63,22 @@ class CometWifiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def _configure_mqtt_bridge(self, data):
         """Configure MQTT bridging to Eurotronic servers."""
-        bridge_config = "
-".join([
+        bridge_lines = [
             "connection eurotronic_bridge",
-            @"
-*[f"address {server}:1883" for server in EUROTRONIC_MQTT_SERVERS],
+            # falls du die Server-Liste hast:
+            *[f"address {server}:1883" for server in EUROTRONIC_MQTT_SERVERS],
             "topic # both 0",
-            "bridge_attempt_unsubscribe false"
-        ])
-
-        # Write the bridge configuration to the appropriate location
-        # This may require appropriate permissions and paths
-        # For example:
+            "bridge_attempt_unsubscribe false",
+        ]
+        bridge_config = "\n".join(bridge_lines)
+    
         bridge_config_path = "/share/mosquitto/bridge.conf"
         try:
-            with open(bridge_config_path, "w") as f:
+            with open(bridge_config_path, "w", encoding="utf-8") as f:
                 f.write(bridge_config)
             _LOGGER.info("MQTT bridge configuration written successfully.")
         except Exception as e:
-            _LOGGER.error(f"Failed to write MQTT bridge configuration: {e}")
-
-    @staticmethod
-    @callback
-    def async_get_options_flow(config_entry):
-        return CometWifiOptionsFlowHandler(config_entry)
+            _LOGGER.error("Failed to write MQTT bridge configuration: %s", e)
 
 
 class CometWifiOptionsFlowHandler(config_entries.OptionsFlow):
