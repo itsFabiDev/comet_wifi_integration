@@ -1,9 +1,9 @@
-﻿{
+{
   "config": {
     "step": {
       "user": {
         "title": "Comet WiFi Thermostat",
-        "description": "Set up your Comet WiFi thermostats.\\n\\n**Instructions:**\\n1. Ensure your thermostats are connected to your Wi-Fi network.\\n2. Use the official Eurotronic app or refer to the thermostat's documentation to obtain your MQTT username and password.\\n3. Enter the MQTT broker details below.",
+        "description": "Set up your Comet WiFi thermostats.\n\n**Instructions:**\n1. Ensure your thermostats are connected to your Wi-Fi network.\n2. Use the official Eurotronic app or refer to the thermostat's documentation to obtain your MQTT username and password.\n3. Enter the MQTT broker details below.",
         "data": {
           "host": "MQTT Broker Host",
           "port": "MQTT Broker Port",
